@@ -176,9 +176,9 @@ Contributions are welcome. Feel free to fork the repository and submit pull requ
 
 ## 📧 Contact
 
-**Koushubh Yadav**
-🔗 LinkedIn: [https://www.linkedin.com/in/koushubh-yadav/](https://www.linkedin.com/in/koushubh-yadav/)
-💻 GitHub: [https://github.com/koushubh](https://github.com/koushubh)
+**Koushubh & Shantanu**
+[🔗 LinkedIn](https://www.linkedin.com/in/koushubh-yadav/)
+[💻 GitHub](https://github.com/koushubh)
 
 ---
 
