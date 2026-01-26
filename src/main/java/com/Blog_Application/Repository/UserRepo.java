@@ -11,4 +11,6 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 
     List<User> findByIsDeletedFalse();
     Optional<User> findByEmailAndIsDeletedFalse(String email);
+
+    long countByIsDeletedFalse();
 }

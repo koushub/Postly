@@ -42,16 +42,37 @@ public class SecurityConfig {
                         .requestMatchers("/home/api/auth/login", "/home/api/USER").permitAll()
 
                         // Public GET endpoints
-                        .requestMatchers(HttpMethod.GET, "/home/api/Category/**", "/home/api/POST/**").permitAll()
+                        // ALLOW Public View of Author Profile
+                        .requestMatchers(HttpMethod.GET, "/home/api/public/users/**").permitAll()
+                        // ALLOW Public View of User's Posts (Important!)
+                        .requestMatchers(HttpMethod.GET, "/home/api/user/{userId}/POST").permitAll()
+                        // Add the base path "/home/api/Category" explicitly
+                        .requestMatchers(HttpMethod.GET,
+                                "/home/api/Category",       // Allow the list
+                                "/home/api/Category/**",    // Allow specific IDs
+                                "/home/api/POST/**"
+                        ).permitAll()
 
                         // 3. ADMIN ONLY: Manage Categories (Create, Update, Delete)
                         .requestMatchers(HttpMethod.POST, "/home/api/Category/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/home/api/Category/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/home/api/Category/**").hasRole("ADMIN")
+                        // Admin Dashboard
+                        .requestMatchers("/home/api/dashboard/**").hasRole("ADMIN")
+                        // Admin can see all comments on platform
+                        .requestMatchers(HttpMethod.GET, "/home/api/comments/all").hasRole("ADMIN")
+                        // Admin Only: View and Dismiss Reports
+                        .requestMatchers(HttpMethod.GET, "/home/api/reports").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/home/api/report/**").hasRole("ADMIN")
+
+                        // Authenticated Users: Create Report
+                        .requestMatchers(HttpMethod.POST, "/home/api/report").authenticated()
 
                         // Both User and Admin can delete posts
                         .requestMatchers(HttpMethod.DELETE, "/home/api/**").authenticated()
 
+                        // 4. Authenticated Actions (Delete, Save, Like, Comment, Edit Profile)
+                        .requestMatchers(HttpMethod.DELETE, "/home/api/**").authenticated()
                         // All other requests authenticated
                         .anyRequest().authenticated()
                 )

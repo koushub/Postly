@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.Blog_Application.Entities.Role;
 
@@ -24,9 +25,9 @@ public class UserDto {
 	
 	@Email(message = "this email not found or this email not valid")
 	private String email;
-	
-	@NotEmpty
-	@Size(min=4,max = 10,message = "password must be minimum 4 characters and garater 10 characters")
+
+	@Size(min=4,max = 10,message = "password must be minimum 4 characters and greater than 10 characters")
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	
 	@NotNull

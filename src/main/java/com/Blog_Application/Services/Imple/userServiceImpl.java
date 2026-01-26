@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.Blog_Application.Entities.Role;
+import com.Blog_Application.Payload.AuthorDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -99,6 +100,20 @@ public class userServiceImpl implements UserServices {
 		// Soft Delete
 		user.setDeleted(true);
 		userRepo.save(user);
+	}
+
+	@Override
+	public AuthorDto getAuthorProfile(int userId) {
+		User user = this.userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+		// Manual mapping or use ModelMapper if you configured it for this
+		AuthorDto author = new AuthorDto();
+		author.setId(user.getId());
+		author.setName(user.getName());
+		author.setAbout(user.getAbout());
+
+		return author;
 	}
 
 	public User DtoToUser(UserDto userdto) {

@@ -2,6 +2,7 @@ package com.Blog_Application.Controller;
 
 import java.util.List;
 
+import com.Blog_Application.Payload.AuthorDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,12 @@ public class UserController {
 	public ResponseEntity<ApiResponse> deleteUserByIdInController(@PathVariable("userId") int id){
 		this.userServices.deleteUser(id);
 		return new ResponseEntity<>(new ApiResponse("User deleted successfully", true), HttpStatus.OK);
+	}
+
+	// Public endpoint to view author details (Safe View)
+	@GetMapping("/public/users/{userId}")
+	public ResponseEntity<AuthorDto> getAuthorProfile(@PathVariable int userId) {
+		AuthorDto author = userServices.getAuthorProfile(userId);
+		return ResponseEntity.ok(author);
 	}
 }

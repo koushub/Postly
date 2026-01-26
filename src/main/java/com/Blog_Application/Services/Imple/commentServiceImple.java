@@ -16,6 +16,9 @@ import com.Blog_Application.Repository.PostRepo;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.Blog_Application.Exception.ApiException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class commentServiceImple implements commentsServices {
@@ -24,6 +27,17 @@ public class commentServiceImple implements commentsServices {
 	private final PostRepo psPost;
 	private final UserRepo userRepo;
 	private final ModelMapper model;
+
+	@Override
+	public List<CommentDto> getCommentsByUser(int userId) {
+		User user = userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+		List<Comment> comments = cRepo.findByUser(user);
+
+		return comments.stream()
+				.map(comment -> model.map(comment, CommentDto.class))
+				.collect(Collectors.toList());
+	}
 
 	public CommentDto addCommentDto(CommentDto cDto, int postId, int userId) {
 		Post post = this.psPost.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));
@@ -66,5 +80,13 @@ public class commentServiceImple implements commentsServices {
 		// --- SECURITY CHECK END ---
 
 		this.cRepo.delete(comment);
+	}
+
+	@Override
+	public List<CommentDto> getAllComments() {
+		List<Comment> comments = cRepo.findAll();
+		return comments.stream()
+				.map(comment -> model.map(comment, CommentDto.class))
+				.collect(Collectors.toList());
 	}
 }

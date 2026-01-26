@@ -2,8 +2,10 @@ package com.Blog_Application.Services.Imple;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.Blog_Application.Payload.CommentDto;
 import com.Blog_Application.Payload.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -43,7 +45,11 @@ public class postServicesImple implements postServices {
 		}
 
 		Post post = DtoToPost(postdto);
-		post.setImageName("default.png");
+		// Only use default.png if the incoming imageName is null or empty
+		if (post.getImageName() == null || post.getImageName().isEmpty()) {
+			post.setImageName("default.png");
+		}
+		// Otherwise, keep the URL that is already in post.getImageName()
 		post.setUploadDate(new Date());
 		post.setCategory(category);
 		post.setUser(user);
@@ -183,11 +189,24 @@ public class postServicesImple implements postServices {
 	public PostDto PostToDto(Post post) {
 		PostDto postDto = model.map(post, PostDto.class);
 
-		if(post.getLikes() != null){
-			postDto.setLikeCount(post.getLikes().size());
-		}
-		else{
+		// 2. Filter LIKES: Exclude likes from soft-deleted users
+		if (post.getLikes() != null) {
+			long validLikeCount = post.getLikes().stream()
+					.filter(like -> !like.getUser().isDeleted()) // Check if user is active
+					.count();
+			postDto.setLikeCount((int) validLikeCount);
+		} else {
 			postDto.setLikeCount(0);
+		}
+
+		// 3. Filter COMMENTS: Exclude comments from soft-deleted users
+		if (post.getComments() != null) {
+			Set<CommentDto> validComments = post.getComments().stream()
+					.filter(comment -> !comment.getUser().isDeleted()) // Check if user is active
+					.map(comment -> model.map(comment, CommentDto.class))
+					.collect(Collectors.toSet());
+
+			postDto.setComments(validComments);
 		}
 		return postDto;
 	}

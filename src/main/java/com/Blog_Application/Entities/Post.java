@@ -1,7 +1,5 @@
 package com.Blog_Application.Entities;
 
-
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,10 +33,13 @@ public class Post {
 	
 	@Column(name="post_title",length=100,nullable = false)
 	private String title;
-	
-	@Column(length = 1000)
+
+	@Column(columnDefinition = "TEXT")
 	private String content;
+
+	@Column(name = "image_name", columnDefinition = "TEXT")
 	private String imageName;
+
 	private Date uploadDate;
 	
 	@ManyToOne
@@ -54,4 +55,6 @@ public class Post {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private Set<Like> likes = new HashSet<>();
 
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Report> reports = new HashSet<>();
 }

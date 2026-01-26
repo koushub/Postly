@@ -80,7 +80,7 @@ public class postController {
 		return new ResponseEntity<>(postResponse, HttpStatus.OK);
 	}
 
-	@GetMapping("category/{categoryId}/POST")
+	@GetMapping("Category/{categoryId}/POST")
 	public ResponseEntity<List<PostDto>> getPostByCategory(@PathVariable("categoryId") int id){
 		List<PostDto> allPostsInCategory = this.pServices.getPostByCategory(id);
 		return new ResponseEntity<>(allPostsInCategory, HttpStatus.OK);
