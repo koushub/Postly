@@ -64,7 +64,9 @@ public class SecurityConfig {
                         // Admin Only: View and Dismiss Reports
                         .requestMatchers(HttpMethod.GET, "/home/api/reports").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/home/api/report/**").hasRole("ADMIN")
-
+                        // Admin can ban unban users
+                        .requestMatchers(HttpMethod.PUT, "/home/api/USER/*/restore").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/home/api/USER/banned").hasRole("ADMIN")
                         // Authenticated Users: Create Report
                         .requestMatchers(HttpMethod.POST, "/home/api/report").authenticated()
 

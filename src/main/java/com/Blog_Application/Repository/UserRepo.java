@@ -8,9 +8,10 @@ import com.Blog_Application.Entities.User;
 
 public interface UserRepo extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
-
+    boolean existsByEmail(String email);
+    boolean existsByName(String name);
     List<User> findByIsDeletedFalse();
     Optional<User> findByEmailAndIsDeletedFalse(String email);
-
+    List<User> findByIsDeletedTrue();
     long countByIsDeletedFalse();
 }

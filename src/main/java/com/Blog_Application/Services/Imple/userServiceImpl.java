@@ -26,6 +26,14 @@ public class userServiceImpl implements UserServices {
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
+		// Check for Duplicate Email
+		if (userRepo.existsByEmail(userDto.getEmail())) {
+			throw new com.Blog_Application.Exception.ApiException("Email already exists!");
+		}
+		// Check for Duplicate Username
+		if (userRepo.existsByName(userDto.getName())) {
+			throw new com.Blog_Application.Exception.ApiException("Username already taken!");
+		}
 		User user = DtoToUser(userDto);
 		if (user.getRole() == null) {
 			user.setRole(Role.USER);
@@ -114,6 +122,32 @@ public class userServiceImpl implements UserServices {
 		author.setAbout(user.getAbout());
 
 		return author;
+	}
+
+	@Override
+	public void restoreUser(int userId) {
+		User user = userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+
+		// --- SECURITY CHECK START ---
+		String currentEmail = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
+		User currentUser = userRepo.findByEmail(currentEmail)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "email", 0));
+
+		if (!currentUser.getRole().name().equals("ADMIN")) {
+			throw new com.Blog_Application.Exception.ApiException("Only Admins can restore users");
+		}
+		// --- SECURITY CHECK END ---
+
+		// Restore the user
+		user.setDeleted(false);
+		userRepo.save(user);
+	}
+
+	@Override
+	public List<UserDto> getBannedUsers() {
+		List<User> bannedUsers = userRepo.findByIsDeletedTrue();
+		return bannedUsers.stream().map(this::userToDto).collect(Collectors.toList());
 	}
 
 	public User DtoToUser(UserDto userdto) {

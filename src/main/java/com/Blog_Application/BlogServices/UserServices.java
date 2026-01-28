@@ -15,4 +15,6 @@ public interface UserServices {
 	List<UserDto> getAlluser();
 	void deleteUser(int userId);
 	AuthorDto getAuthorProfile(int userId);
+	void restoreUser(int userId);
+	List<UserDto> getBannedUsers();
 }
