@@ -1,0 +1,18 @@
+# ===== Secrets =====
+node-backend/firebase-service-account.json
+.env
+*.key
+*.pem
+
+# ===== Node =====
+node-backend/node_modules/
+react-frontend/node_modules/
+
+# ===== Spring =====
+spring-backend/target/
+*.log
+
+# ===== IDE =====
+.idea/
+.vscode/
+ 
