@@ -1,0 +1,21 @@
+package com.postly.Payload;
+
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class CommentDto {
+	
+	private int id;
+
+	@NotEmpty(message = "Title cannot be empty")
+	private String content;
+	// who wrote comment
+	private UserDto user;
+	// ID of the post
+	private int postId;
+	// Title of post
+	private String postTitle;
+}
