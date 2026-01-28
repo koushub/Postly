@@ -32,7 +32,6 @@ public class LikeServiceImpl implements LikeService {
 
         List<Like> likes = likeRepo.findByUser(user);
 
-        // Map the *Post* from the Like entity to a PostDto
         return likes.stream()
                 .map(like -> modelMapper.map(like.getPost(), PostDto.class))
                 .collect(Collectors.toList());

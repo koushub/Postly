@@ -29,7 +29,6 @@ public class ReportServiceImpl implements ReportService {
         report.setReason(reportDto.getReason());
         report.setReporter(reporter);
 
-        // Logic to determine what is being reported based on the DTO
         if (reportDto.getPostId() != null) {
             Post post = postRepo.findById(reportDto.getPostId())
                     .orElseThrow(() -> new ResourceNotFoundException("Post", "id", reportDto.getPostId()));
@@ -59,13 +58,11 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public void deleteReport(int reportId) {
-        // Just deletes the ticket (dismisses it), doesn't delete the content
         Report report = reportRepo.findById(reportId)
                 .orElseThrow(() -> new ResourceNotFoundException("Report", "id", reportId));
         reportRepo.delete(report);
     }
 
-    // Helper to convert Entity -> DTO
     private ReportDto mapToDto(Report r) {
         ReportDto dto = new ReportDto();
         dto.setId(r.getId());

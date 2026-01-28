@@ -44,7 +44,6 @@ public class CategoryServiceImple implements categoryService {
 
 	@Override
 	public List<CategoryDto> getAllCategory() {
-		// Use the new repository method
 		List<Category> allCategory = this.cate.findByIsDeletedFalse();
 		return allCategory.stream().map(this::categoryTODto).collect(Collectors.toList());
 	}
@@ -52,7 +51,6 @@ public class CategoryServiceImple implements categoryService {
 	@Override
 	public void deleteCategory(int id) {
 		Category category = this.cate.findById(id).orElseThrow(()-> new ResourceNotFoundException("Category","id",id));
-		// Soft Delete
 		category.setDeleted(true);
 		this.cate.save(category);
 	}

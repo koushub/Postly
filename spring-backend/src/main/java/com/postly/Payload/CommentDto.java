@@ -12,10 +12,7 @@ public class CommentDto {
 
 	@NotEmpty(message = "Title cannot be empty")
 	private String content;
-	// who wrote comment
 	private UserDto user;
-	// ID of the post
 	private int postId;
-	// Title of post
 	private String postTitle;
 }

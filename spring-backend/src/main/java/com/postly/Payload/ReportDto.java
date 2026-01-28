@@ -10,13 +10,11 @@ import lombok.Setter;
 public class ReportDto {
     private int id;
     private String reason;
-    private String reporterName; // Just show name for simplicity
+    private String reporterName;
 
-    // IDs of the targets (to help frontend know what to show)
     private Integer postId;
     private Integer commentId;
     private Integer reportedUserId;
 
-    // Optional: Include Titles/Content previews if you want the dashboard to be fancy
     private String contentPreview;
 }

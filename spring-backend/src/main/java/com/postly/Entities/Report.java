@@ -16,16 +16,12 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // The "one liner" reason
     @Column(nullable = false)
     private String reason;
 
-    // Who is making the report?
     @ManyToOne
     @JoinColumn(name = "reporter_id", nullable = false)
     private User reporter;
-
-    // --- TARGETS (Only one will be set) ---
 
     @ManyToOne
     @JoinColumn(name = "post_id")

@@ -25,7 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User { // Removed "implements UserDetails"
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

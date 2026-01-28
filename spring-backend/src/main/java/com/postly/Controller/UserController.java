@@ -47,21 +47,18 @@ public class UserController {
 		return new ResponseEntity<>(new ApiResponse("User deleted successfully", true), HttpStatus.OK);
 	}
 
-	// Public endpoint to view author details (Safe View)
 	@GetMapping("/public/users/{userId}")
 	public ResponseEntity<AuthorDto> getAuthorProfile(@PathVariable int userId) {
 		AuthorDto author = userServices.getAuthorProfile(userId);
 		return ResponseEntity.ok(author);
 	}
 
-	// ADMIN ONLY: Unban/Restore a user
 	@PutMapping("USER/{userId}/restore")
 	public ResponseEntity<ApiResponse> restoreUser(@PathVariable("userId") int id) {
 		this.userServices.restoreUser(id);
 		return new ResponseEntity<>(new ApiResponse("User restored successfully", true), HttpStatus.OK);
 	}
 
-	// ADMIN ONLY: Get list of all banned users
 	@GetMapping("USER/banned")
 	public ResponseEntity<List<UserDto>> getBannedUsers() {
 		return ResponseEntity.ok(userServices.getBannedUsers());

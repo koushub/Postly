@@ -19,7 +19,6 @@ public class SavedPostController {
 
     private final SavedPostService savedPostService;
 
-    // Toggle Save (Like the Like button, but for saving)
     @PostMapping("/post/{postId}/save")
     public ResponseEntity<ApiResponse> toggleSavePost(@PathVariable int postId, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
@@ -34,7 +33,6 @@ public class SavedPostController {
         }
     }
 
-    // Get All Saved Posts for the logged-in user
     @GetMapping("/user/saved-posts")
     public ResponseEntity<List<PostDto>> getMySavedPosts(Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();

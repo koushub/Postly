@@ -22,18 +22,15 @@ public class postController {
 
 	private final postServices pServices;
 
-	// Remove userId from PathVariable
 	@PostMapping("/category/{categoryId}/POST")
 	public ResponseEntity<PostDto> uploadPost(
 			@Valid @RequestBody PostDto post,
 			@PathVariable int categoryId,
-			Authentication authentication) { // Inject Authentication
+			Authentication authentication) {
 
-		// 1. Get the UserPrincipal from Security Context
 		UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 		int loggedInUserId = Integer.parseInt(principal.getUserId());
 
-		// 2. Call service with the secure ID
 		PostDto post1 = this.pServices.createPost(post, loggedInUserId, categoryId);
 		return new ResponseEntity<>(post1, HttpStatus.CREATED);
 	}

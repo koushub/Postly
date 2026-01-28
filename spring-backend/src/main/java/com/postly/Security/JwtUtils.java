@@ -12,8 +12,7 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class JwtUtils {
 
-    // You can move these to application.properties like the Healthcare app
-    private long jwtExpirationTime = 5 * 60 * 60 * 1000; // 5 hours in ms
+    private long jwtExpirationTime = 5 * 60 * 60 * 1000;
     private String jwtSecret = "my-very-long-and-secure-secret-key-for-jwt-authentication-must-be-at-least-256-bits";
 
     private SecretKey secretKey;
@@ -23,7 +22,6 @@ public class JwtUtils {
         secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
-    // Generate JWT with custom claims (user_id, user_role)
     public String generateToken(UserPrincipal principal) {
         Date now = new Date();
         Date expiresAt = new Date(now.getTime() + jwtExpirationTime);
@@ -40,7 +38,6 @@ public class JwtUtils {
                 .compact();
     }
 
-    // Validate and return Claims
     public Claims validateToken(String jwt) {
         return Jwts.parser()
                 .verifyWith(secretKey)

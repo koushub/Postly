@@ -14,7 +14,6 @@ import lombok.ToString;
 @ToString
 public class UserPrincipal implements UserDetails {
 
-    // Using String to store ID to be compatible with Token logic, usually parsed from int
     private final String userId;
     private final String email;
     private final String password;

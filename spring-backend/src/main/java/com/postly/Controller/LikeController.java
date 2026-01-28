@@ -32,7 +32,6 @@ public class LikeController {
             Authentication authentication
     )
     {
-        // 1. Extract User ID from Token
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         int userId = Integer.parseInt(principal.getUserId());
 

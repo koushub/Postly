@@ -45,11 +45,9 @@ public class postServicesImple implements postServices {
 		}
 
 		Post post = DtoToPost(postdto);
-		// Only use default.png if the incoming imageName is null or empty
 		if (post.getImageName() == null || post.getImageName().isEmpty()) {
 			post.setImageName("default.png");
 		}
-		// Otherwise, keep the URL that is already in post.getImageName()
 		post.setUploadDate(new Date());
 		post.setCategory(category);
 		post.setUser(user);
@@ -62,7 +60,6 @@ public class postServicesImple implements postServices {
 		Post post = pRepo.findById(id)
 				.orElseThrow(()-> new ResourceNotFoundException("Post", "id", id));
 
-		// --- SECURITY CHECK START ---
 		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 		User currentUser = userRepo.findByEmail(currentEmail)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "email : " + currentEmail, 0));
@@ -70,13 +67,9 @@ public class postServicesImple implements postServices {
 		if (post.getUser().getId() != currentUser.getId()) {
 			throw new ApiException("You are not authorized to update this post");
 		}
-		// --- SECURITY CHECK END ---
 
 		post.setTitle(postdto.getTitle());
 		post.setContent(postdto.getContent());
-
-		// Optional: Update category if provided in DTO
-		// if(postdto.getCategory() != null) ...
 
 		Post pr = pRepo.save(post);
 		return this.PostToDto(pr);
@@ -90,22 +83,16 @@ public class postServicesImple implements postServices {
 
 	@Override
 	public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
-		// 1. Determine Sort Direction
 		Sort sort = (sortDir.equalsIgnoreCase("asc")) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
-		// 2. Create Pageable Object
 		Pageable p = PageRequest.of(pageNumber, pageSize, sort);
 
-		// 3. Fetch Page from DB
 		Page<Post> pagePost = this.pRepo.findAll(p);
 
-		// 4. Get Content from Page
 		List<Post> allPosts = pagePost.getContent();
 
-		// 5. Convert to DTOs
 		List<PostDto> postDtos = allPosts.stream().map(this::PostToDto).collect(Collectors.toList());
 
-		// 6. Construct Response
 		PostResponse postResponse = new PostResponse();
 		postResponse.setContent(postDtos);
 		postResponse.setPageNumber(pagePost.getNumber());
@@ -119,29 +106,21 @@ public class postServicesImple implements postServices {
 
 	@Override
 	public void delete(int id) {
-		// 1. Find Post
 		Post post = pRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
 
-		// 2. Get Current User Email
 		String currentEmail = SecurityContextHolder.getContext().getAuthentication().getName();
 
-		// 3. Find User
-		// Note: We pass '0' because ResourceNotFoundException expects an int/Integer value,
-		// but we are searching by String (email).
 		User currentUser = userRepo.findByEmail(currentEmail)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "email : " + currentEmail, 0));
 
-		// 4. Check: Is Owner OR Is Admin?
 		boolean isOwner = currentUser.getId() == post.getUser().getId();
 		boolean isAdmin = currentUser.getRole().name().equals("ADMIN");
 
 		if (!isOwner && !isAdmin) {
-			// Use ApiException because ResourceNotFoundException cannot take just a String message
 			throw new ApiException("You are not authorized to delete this post");
 		}
 
-		// 5. Delete
 		this.pRepo.delete(post);
 	}
 
@@ -154,23 +133,17 @@ public class postServicesImple implements postServices {
 
 	@Override
 	public PostResponse getPostByUser(int userId, Integer pageNumber, Integer pageSize) {
-		// 1. Fetch User
 		User user = userRepo.findById(userId)
 				.orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
 
-		// 2. Create Pageable
-		// You can add sorting params here if you want, defaulting to postId desc for now
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("postId").descending());
 
-		// 3. Fetch Page
 		Page<Post> pagePost = pRepo.findByUser(user, pageable);
 
-		// 4. Convert to DTOs
 		List<PostDto> postDtos = pagePost.getContent().stream()
 				.map(this::PostToDto)
 				.toList();
 
-		// 5. Construct Response
 		PostResponse postResponse = new PostResponse();
 		postResponse.setContent(postDtos);
 		postResponse.setPageNumber(pagePost.getNumber());
@@ -189,20 +162,18 @@ public class postServicesImple implements postServices {
 	public PostDto PostToDto(Post post) {
 		PostDto postDto = model.map(post, PostDto.class);
 
-		// 2. Filter LIKES: Exclude likes from soft-deleted users
 		if (post.getLikes() != null) {
 			long validLikeCount = post.getLikes().stream()
-					.filter(like -> !like.getUser().isDeleted()) // Check if user is active
+					.filter(like -> !like.getUser().isDeleted())
 					.count();
 			postDto.setLikeCount((int) validLikeCount);
 		} else {
 			postDto.setLikeCount(0);
 		}
 
-		// 3. Filter COMMENTS: Exclude comments from soft-deleted users
 		if (post.getComments() != null) {
 			Set<CommentDto> validComments = post.getComments().stream()
-					.filter(comment -> !comment.getUser().isDeleted()) // Check if user is active
+					.filter(comment -> !comment.getUser().isDeleted())
 					.map(comment -> model.map(comment, CommentDto.class))
 					.collect(Collectors.toSet());
 

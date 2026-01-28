@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity // Replaces explicit HttpMethod checks in chain with annotation support if needed
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final CustomJwtVerificationFilter jwtFilter;
@@ -35,46 +35,32 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public Endpoints
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers("/home/api/auth/login", "/home/api/USER").permitAll()
 
-                        // Public GET endpoints
-                        // ALLOW Public View of Author Profile
                         .requestMatchers(HttpMethod.GET, "/home/api/public/users/**").permitAll()
-                        // ALLOW Public View of User's Posts (Important!)
                         .requestMatchers(HttpMethod.GET, "/home/api/user/{userId}/POST").permitAll()
-                        // Add the base path "/home/api/Category" explicitly
                         .requestMatchers(HttpMethod.GET,
-                                "/home/api/Category",       // Allow the list
-                                "/home/api/Category/**",    // Allow specific IDs
+                                "/home/api/Category",
+                                "/home/api/Category/**",
                                 "/home/api/POST/**"
                         ).permitAll()
 
-                        // 3. ADMIN ONLY: Manage Categories (Create, Update, Delete)
                         .requestMatchers(HttpMethod.POST, "/home/api/Category/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/home/api/Category/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/home/api/Category/**").hasRole("ADMIN")
-                        // Admin Dashboard
                         .requestMatchers("/home/api/dashboard/**").hasRole("ADMIN")
-                        // Admin can see all comments on platform
                         .requestMatchers(HttpMethod.GET, "/home/api/comments/all").hasRole("ADMIN")
-                        // Admin Only: View and Dismiss Reports
                         .requestMatchers(HttpMethod.GET, "/home/api/reports").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/home/api/report/**").hasRole("ADMIN")
-                        // Admin can ban unban users
                         .requestMatchers(HttpMethod.PUT, "/home/api/USER/*/restore").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/home/api/USER/banned").hasRole("ADMIN")
-                        // Authenticated Users: Create Report
                         .requestMatchers(HttpMethod.POST, "/home/api/report").authenticated()
 
-                        // Both User and Admin can delete posts
                         .requestMatchers(HttpMethod.DELETE, "/home/api/**").authenticated()
 
-                        // 4. Authenticated Actions (Delete, Save, Like, Comment, Edit Profile)
                         .requestMatchers(HttpMethod.DELETE, "/home/api/**").authenticated()
-                        // All other requests authenticated
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -92,7 +78,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // Kept your existing CORS config as it is good for React frontend
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

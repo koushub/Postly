@@ -20,7 +20,6 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    // User: Submit a report
     @PostMapping("/report")
     public ResponseEntity<ReportDto> createReport(@RequestBody ReportDto reportDto, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
@@ -30,14 +29,12 @@ public class ReportController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    // Admin: View all reports
-    @PreAuthorize("hasRole('ADMIN')") // Ensure only Admin can see this
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/reports")
     public ResponseEntity<List<ReportDto>> getAllReports() {
         return ResponseEntity.ok(reportService.getAllReports());
     }
 
-    // Admin: Dismiss (delete) a report (e.g., if it was a false alarm)
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/report/{id}")
     public ResponseEntity<ApiResponse> dismissReport(@PathVariable int id) {

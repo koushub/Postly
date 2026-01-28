@@ -9,9 +9,7 @@ import java.util.Optional;
 
 public interface SavedPostRepo extends JpaRepository<SavedPost, Integer> {
 
-    // Check if user already saved this post
     Optional<SavedPost> findByUserAndPost(User user, Post post);
 
-    // Get all saved posts by a user
     List<SavedPost> findByUser(User user);
 }

@@ -44,14 +44,10 @@ public class AuthController {
             throw new Exception("Invalid username or password", e);
         }
 
-        // 1. Get UserPrincipal from the successful authentication object
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
-        // 2. Generate Token using UserPrincipal (contains ID and Role)
         String token = this.jwtUtils.generateToken(principal);
 
-        // 3. Fetch User Entity (Optional: Only if you need to return full user DTO in response body)
-        // If strict Healthcare pattern, you might only return token + message, but keeping UserDto for your frontend
         User user = userRepo.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

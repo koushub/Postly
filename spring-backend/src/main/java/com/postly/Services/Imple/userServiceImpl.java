@@ -26,11 +26,9 @@ public class userServiceImpl implements UserServices {
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
-		// Check for Duplicate Email
 		if (userRepo.existsByEmail(userDto.getEmail())) {
 			throw new com.postly.Exception.ApiException("Email already exists!");
 		}
-		// Check for Duplicate Username
 		if (userRepo.existsByName(userDto.getName())) {
 			throw new com.postly.Exception.ApiException("Username already taken!");
 		}
@@ -49,25 +47,16 @@ public class userServiceImpl implements UserServices {
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-		// --- SECURITY CHECK START ---
 		String currentEmail = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
-		// Check if the logged-in user's email matches the account they are trying to update
 		if (!user.getEmail().equals(currentEmail)) {
 			throw new com.postly.Exception.ApiException("You can only update your own profile");
 		}
-		// --- SECURITY CHECK END ---
 
 		user.setName(userDto.getName());
-		// user.setEmail(userDto.getEmail()); // Careful allowing email updates (might need re-verification)
 
-		// user.setEmail(userDto.getEmail()); // Careful allowing email updates
-
-		// --- REPLACE THE OLD PASSWORD LINE WITH THIS BLOCK ---
-		// Only update password if the user actually sent a new one (not null, not empty)
 		if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
 			user.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
 		}
-		// ---------------------------------------------------
 
 		user.setAbout(userDto.getAbout());
 
@@ -93,7 +82,6 @@ public class userServiceImpl implements UserServices {
 		User user = userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
-		// --- SECURITY CHECK START ---
 		String currentEmail = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
 		User currentUser = userRepo.findByEmail(currentEmail).orElseThrow(() -> new ResourceNotFoundException("User", "email", 0));
 
@@ -103,9 +91,7 @@ public class userServiceImpl implements UserServices {
 		if (!isSelf && !isAdmin) {
 			throw new com.postly.Exception.ApiException("You are not authorized to delete this user");
 		}
-		// --- SECURITY CHECK END ---
 
-		// Soft Delete
 		user.setDeleted(true);
 		userRepo.save(user);
 	}
@@ -115,7 +101,6 @@ public class userServiceImpl implements UserServices {
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-		// Manual mapping or use ModelMapper if you configured it for this
 		AuthorDto author = new AuthorDto();
 		author.setId(user.getId());
 		author.setName(user.getName());
@@ -129,7 +114,6 @@ public class userServiceImpl implements UserServices {
 		User user = userRepo.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
-		// --- SECURITY CHECK START ---
 		String currentEmail = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getName();
 		User currentUser = userRepo.findByEmail(currentEmail)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "email", 0));
@@ -137,9 +121,7 @@ public class userServiceImpl implements UserServices {
 		if (!currentUser.getRole().name().equals("ADMIN")) {
 			throw new com.postly.Exception.ApiException("Only Admins can restore users");
 		}
-		// --- SECURITY CHECK END ---
 
-		// Restore the user
 		user.setDeleted(false);
 		userRepo.save(user);
 	}

@@ -20,8 +20,6 @@ public class commentController {
 
 	private final commentsServices cServices;
 
-	// For admin use
-	//@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/comments/all")
 	public ResponseEntity<List<CommentDto>> getAllComments() {
 		List<CommentDto> allComments = cServices.getAllComments();
@@ -41,15 +39,13 @@ public class commentController {
 			Authentication authentication
 	)
 	{
-		// 1. Extract User ID from Token
 		UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 		int userId = Integer.parseInt(principal.getUserId());
-		// 2. Pass userId to service
 		CommentDto ans = this.cServices.addCommentDto(cDto, id, userId);
 		return new ResponseEntity<>(ans, HttpStatus.CREATED);
 	}
 
-	@DeleteMapping("comments/{commentId}") // Standard REST pattern
+	@DeleteMapping("comments/{commentId}")
 	public ApiResponse deleteCommentInController(@PathVariable int commentId) {
 		this.cServices.deleteComment(commentId);
 		return new ApiResponse("comment deleted successfully", true);

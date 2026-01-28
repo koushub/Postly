@@ -9,8 +9,8 @@ public class modelMapperConversion {
 	
 	
 	@Bean
-	public ModelMapper modelMapper() {// conversion 
-		return new ModelMapper();// ModelMapper obj = new ModelMapper();
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 
 }

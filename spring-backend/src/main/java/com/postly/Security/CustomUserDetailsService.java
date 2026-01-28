@@ -22,8 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = this.userRepo.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User ", "email: " + email, 0));
-        // Create UserPrincipal based on your User entity
-        // Note: Adding "ROLE_" prefix to match standard Spring Security expectations if your Enum is just "ADMIN"
         String roleName = "ROLE_" + user.getRole().name();
 
         return new UserPrincipal(

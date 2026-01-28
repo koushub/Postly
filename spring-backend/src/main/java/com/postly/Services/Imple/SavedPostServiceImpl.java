@@ -37,17 +37,15 @@ public class SavedPostServiceImpl implements SavedPostService {
         Optional<SavedPost> existing = savedPostRepo.findByUserAndPost(user, post);
 
         if (existing.isPresent()) {
-            // Already saved -> Unsave it
             savedPostRepo.delete(existing.get());
-            return false; // Unsaved
+            return false;
         } else {
-            // Not saved -> Save it
             SavedPost savedPost = new SavedPost();
             savedPost.setUser(user);
             savedPost.setPost(post);
             savedPost.setSavedDate(new Date());
             savedPostRepo.save(savedPost);
-            return true; // Saved
+            return true;
         }
     }
 
@@ -58,7 +56,6 @@ public class SavedPostServiceImpl implements SavedPostService {
 
         List<SavedPost> savedPosts = savedPostRepo.findByUser(user);
 
-        // Convert SavedPost entities -> Post entities -> PostDtos
         return savedPosts.stream()
                 .map(saved -> modelMapper.map(saved.getPost(), PostDto.class))
                 .collect(Collectors.toList());
