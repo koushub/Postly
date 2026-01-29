@@ -10,14 +10,17 @@ const app = express();
 
 // Global Middleware
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:5173' })); // Allow React Frontend
+// Allow access from Env Variable or Localhost
+app.use(cors({ 
+    origin: process.env.CLIENT_URL || 'http://localhost:5173' 
+}));
 
-// Register Routes
-// Note: We mount them under different paths for clarity
-app.use('/auth', authRoutes);    // e.g., http://localhost:3000/auth/forgot-password
-app.use('/storage', uploadRoutes); // e.g., http://localhost:3000/storage/upload
+// Auth and upload Routes
+app.use('/auth', authRoutes);
+app.use('/storage', uploadRoutes);
 
-const PORT = 3000;
+// Dynamic Port so we Use Render's port or default to 3000
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Node Service running on port ${PORT}`);
 });
