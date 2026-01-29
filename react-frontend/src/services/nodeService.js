@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // This points to your Node.js Microservice
-const NODE_API_URL = 'http://localhost:3000';
+const NODE_API_URL = 'https://postly-node-backend.onrender.com';
 
 export const uploadImage = async (file) => {
   const formData = new FormData();
