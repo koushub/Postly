@@ -16,3 +16,6 @@ spring-backend/target/
 .idea/
 .vscode/
  
+# Environment variables
+.env
+**/.env
