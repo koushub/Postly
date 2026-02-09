@@ -7,19 +7,15 @@ import axios from "axios";
 export default function Login() {
   const login = useAuthStore((state) => state.login);
 
-  // Toggle state
   const [isForgotPassword, setIsForgotPassword] = useState(false);
 
-  // Form states
   const [form, setForm] = useState({ email: "", password: "" });
   const [resetEmail, setResetEmail] = useState("");
 
-  // UI states
   const [message, setMessage] = useState("");
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [loadingReset, setLoadingReset] = useState(false);
 
-  // --- LOGIN HANDLER ---
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setLoadingLogin(true);
@@ -35,7 +31,6 @@ export default function Login() {
     }
   };
 
-  // --- FORGOT PASSWORD HANDLER ---
   const handleForgotSubmit = async (e) => {
     e.preventDefault();
     setLoadingReset(true);
@@ -63,8 +58,7 @@ export default function Login() {
 
         {!isForgotPassword ? (
 
-          /* ================= LOGIN FORM ================= */
-          <form onSubmit={handleLoginSubmit}>
+            <form onSubmit={handleLoginSubmit}>
             <input
               className="input input-bordered w-full mb-3"
               placeholder="Email"
@@ -86,7 +80,7 @@ export default function Login() {
               }
             />
 
-            {/* Forgot Password */}
+            {}
             <div className="text-right mb-6">
               <button
                 type="button"
@@ -101,7 +95,7 @@ export default function Login() {
               </button>
             </div>
 
-            {/* Login Button with Spinner */}
+            {}
             <button
               className="btn btn-primary w-full mb-4"
               disabled={loadingLogin}
@@ -128,8 +122,7 @@ export default function Login() {
 
         ) : (
 
-          /* ================= FORGOT PASSWORD FORM ================= */
-          <form onSubmit={handleForgotSubmit}>
+            <form onSubmit={handleForgotSubmit}>
             <p className="text-sm text-base-content/70 text-center mb-4">
               Enter your email address and we'll send you a reset link.
             </p>

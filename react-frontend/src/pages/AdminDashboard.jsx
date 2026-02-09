@@ -20,43 +20,38 @@ const AdminDashboard = () => {
   const { user, token } = useAuthStore();
   const navigate = useNavigate();
 
-  // Stats & Data State
-  const [stats, setStats] = useState({
+    const [stats, setStats] = useState({
     totalUsers: 0,
     totalPosts: 0,
     totalReports: 0,
   });
   const [activeTab, setActiveTab] = useState("reports");
 
-  // Lists
-  const [reports, setReports] = useState([]);
+    const [reports, setReports] = useState([]);
   const [usersList, setUsersList] = useState([]);
   const [categories, setCategories] = useState([]);
   const [postsList, setPostsList] = useState([]);
   const [commentsList, setCommentsList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Category Form
-  const [newCategoryTitle, setNewCategoryTitle] = useState("");
+    const [newCategoryTitle, setNewCategoryTitle] = useState("");
   const [newCategoryDesc, setNewCategoryDesc] = useState("");
 
-  // --- CUSTOM MODAL STATES ---
-  const [confirmDialog, setConfirmDialog] = useState({
+    const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: "",
     message: "",
-    action: null, // The function to run if confirmed
-    confirmBtnClass: "btn-error", // Optional: to change button color
-  });
+    action: null,
+        confirmBtnClass: "btn-error",
+    });
 
   const [infoAlert, setInfoAlert] = useState({
     isOpen: false,
-    type: "error", // 'error' or 'success'
-    message: "",
+    type: "error",
+      message: "",
   });
 
-  // 1. Initial Check & Stats
-  useEffect(() => {
+    useEffect(() => {
     if (!token || !user) {
       navigate("/login");
       return;
@@ -75,8 +70,7 @@ const AdminDashboard = () => {
     if (activeTab === "reports") fetchReports();
   }, [token, user, navigate]);
 
-  // Tab Switcher Logic
-  useEffect(() => {
+    useEffect(() => {
     if (activeTab === "reports") fetchReports();
     if (activeTab === "categories") fetchCategories();
     if (activeTab === "users") fetchUsers();
@@ -84,8 +78,7 @@ const AdminDashboard = () => {
     if (activeTab === "comments") fetchComments();
   }, [activeTab]);
 
-  // --- API CALLS ---
-  const fetchStats = async () => {
+    const fetchStats = async () => {
     try {
       const res = await api.get("/dashboard/stats");
       setStats(res.data);
@@ -122,8 +115,7 @@ const AdminDashboard = () => {
       const activeRes = await api.get("/USER");
       const bannedRes = await api.get("/USER/banned");
 
-      // Merge and mark banned flag
-      const activeUsers = activeRes.data.map((u) => ({ ...u, banned: false }));
+        const activeUsers = activeRes.data.map((u) => ({ ...u, banned: false }));
       const bannedUsers = bannedRes.data.map((u) => ({ ...u, banned: true }));
 
       setUsersList([...activeUsers, ...bannedUsers]);
@@ -200,10 +192,7 @@ const unbanUser = async (id) => {
     }
   };
 
-  // --- CONFIRMATION HANDLERS ---
-
-  // 1. Generic Delete Handler
-  const confirmDeleteEntity = (type, id) => {
+    const confirmDeleteEntity = (type, id) => {
     setConfirmDialog({
       isOpen: true,
       title: `Delete ${type}?`,
@@ -269,8 +258,7 @@ const confirmUnbanUser = (id) => {
 };
 
 
-  // 2. Dismiss Report Handler
-  const confirmDismissReport = (reportId) => {
+    const confirmDismissReport = (reportId) => {
     setConfirmDialog({
       isOpen: true,
       title: "Dismiss Report",
@@ -292,8 +280,7 @@ const confirmUnbanUser = (id) => {
     });
   };
 
-  // 3. Delete Report Target Handler
-  const confirmDeleteReportTarget = (report) => {
+    const confirmDeleteReportTarget = (report) => {
     setConfirmDialog({
       isOpen: true,
       title: "Delete Reported Content",
@@ -309,8 +296,7 @@ const confirmUnbanUser = (id) => {
           else if (report.reportedUserId)
             await api.delete(`/USER/${report.reportedUserId}`);
 
-          // Cleanup report
-          await api.delete(`/report/${report.id}`);
+            await api.delete(`/report/${report.id}`);
           setReports(reports.filter((r) => r.id !== report.id));
           fetchStats();
           setConfirmDialog({ ...confirmDialog, isOpen: false });
@@ -330,8 +316,7 @@ const confirmUnbanUser = (id) => {
     });
   };
 
-  // 4. Add Category
-  const handleAddCategory = async (e) => {
+    const handleAddCategory = async (e) => {
     e.preventDefault();
     if (!newCategoryTitle.trim()) return;
     try {
@@ -358,9 +343,9 @@ const confirmUnbanUser = (id) => {
 
   return (
     <div className="min-h-screen pt-24 pb-10 px-4 max-w-7xl mx-auto relative">
-      {/* ================= MODALS ================= */}
+      {}
 
-      {/* 1. Confirmation Modal */}
+      {}
       {confirmDialog.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div
@@ -392,7 +377,7 @@ const confirmUnbanUser = (id) => {
         </div>
       )}
 
-      {/* 2. Info/Error Modal */}
+      {}
       {infoAlert.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div
@@ -420,15 +405,15 @@ const confirmUnbanUser = (id) => {
         </div>
       )}
 
-      {/* ================= DASHBOARD CONTENT ================= */}
+      {}
 
-      {/* Header */}
+      {}
       <div className="flex items-center gap-3 mb-8">
         <Shield size={32} className="text-primary" />
         <h1 className="text-3xl font-extrabold">Admin Dashboard</h1>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div className="stats shadow bg-base-100 border border-base-200">
           <div className="stat">
@@ -465,7 +450,7 @@ const confirmUnbanUser = (id) => {
         </div>
       </div>
 
-      {/* Tabs */}
+      {}
       <div className="tabs tabs-boxed bg-base-100 p-2 mb-6 shadow-sm overflow-x-auto">
         <a
           className={`tab tab-lg text-lg text-heading ${activeTab === "reports" ? "tab-active" : ""}`}
@@ -499,7 +484,7 @@ const confirmUnbanUser = (id) => {
         </a>
       </div>
 
-      {/* Content Container */}
+      {}
       <div className="bg-base-100 shadow-xl rounded-2xl border border-base-200 min-h-[400px] p-6">
         {loading && (
           <div className="flex justify-center p-10">
@@ -507,7 +492,7 @@ const confirmUnbanUser = (id) => {
           </div>
         )}
 
-        {/* === REPORTS === */}
+        {}
         {!loading && activeTab === "reports" && (
           <div>
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -572,7 +557,7 @@ const confirmUnbanUser = (id) => {
           </div>
         )}
 
-        {/* === POSTS MANAGEMENT === */}
+        {}
         {!loading && activeTab === "posts" && (
           <div>
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -649,7 +634,7 @@ const confirmUnbanUser = (id) => {
           </div>
         )}
 
-        {/* === COMMENTS MANAGEMENT === */}
+        {}
         {!loading && activeTab === "comments" && (
           <div>
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -718,7 +703,7 @@ const confirmUnbanUser = (id) => {
           </div>
         )}
 
-        {/* === USERS MANAGEMENT === */}
+        {}
         {!loading && activeTab === "users" && (
           <div>
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -774,7 +759,7 @@ const confirmUnbanUser = (id) => {
           </div>
         )}
 
-        {/* === CATEGORIES === */}
+        {}
         {!loading && activeTab === "categories" && (
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">

@@ -24,20 +24,15 @@ export default function Register() {
     setLoading(true);
     setErrorMessage("");
     try {
-      // 1. Register
       await registerUser(form);
 
-      // 2. Auto-login
       const data = await loginUser(form.email, form.password);
 
-      // 3. Store token + user
       login(data);
 
-      // 4. Redirect home
       navigate("/");
     } catch (error) {
       console.error(error);
-      // Extract backend message
       if (error.response && error.response.data?.message) {
         setErrorMessage(error.response.data.message);
       } else {
@@ -83,7 +78,7 @@ export default function Register() {
           onChange={(e) => setForm({ ...form, about: e.target.value })}
         ></textarea>
 
-        {/* Error Message */}
+        {}
         {errorMessage && (
           <div
             role="alert"
@@ -107,7 +102,7 @@ export default function Register() {
           </div>
         )}
 
-        {/* Button or Loader */}
+        {}
         <button className="btn btn-primary w-full mb-4" disabled={loading}>
           {loading ? (
             <span className="loading loading-spinner loading-sm"></span>

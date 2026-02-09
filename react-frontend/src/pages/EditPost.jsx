@@ -16,7 +16,6 @@ const EditPost = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load Categories & Post Data
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -25,11 +24,9 @@ const EditPost = () => {
 
     const initData = async () => {
       try {
-        // 1. Fetch Categories
         const catRes = await api.get("/Category");
         setCategories(catRes.data);
 
-        // 2. Fetch Post Details
         const postRes = await api.get(`/POST/${postId}`);
         const post = postRes.data;
 
@@ -55,13 +52,11 @@ const EditPost = () => {
       const updatedPost = {
         title,
         content,
-        imageName: "default.png" // Preserve or update image logic if you have it
+        imageName: "default.png"
       };
 
-      // Endpoint: PUT /home/api/POST/{postId}
       await api.put(`/POST/${postId}`, updatedPost);
-      
-      // Redirect back to the post or profile
+
       navigate(`/post/${postId}`);
     } catch (err) {
       console.error("Update failed", err);
@@ -95,13 +90,12 @@ const EditPost = () => {
           </div>
 
           <div className="form-control w-full">
-             {/* Category is often read-only in edits, or you can allow change if backend supports it */}
+             {}
              <label className="label"><span className="label-text font-bold">Category (Current)</span></label>
              <select 
                className="select select-bordered" 
                value={categoryId} 
-               disabled 
-               // Disabled because changing category usually requires a different endpoint or complex logic
+               disabled
              >
                 {categories.map(c => <option key={c.id} value={c.id}>{c.categoryTitle}</option>)}
              </select>

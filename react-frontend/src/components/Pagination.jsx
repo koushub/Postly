@@ -13,10 +13,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       >
         <ChevronLeft size={20} />
       </button>
-      
-      {/* Show Page Numbers (Simplified logic: First, Last, Current) */}
+
       {[...Array(totalPages)].map((_, index) => {
-         // Logic to show limited pages if too many
          if (
            index === 0 || 
            index === totalPages - 1 || 

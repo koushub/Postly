@@ -1,4 +1,3 @@
-// authService.js
 import api from "./api";
 
 export const loginUser = async (email, password) => {

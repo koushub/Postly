@@ -4,19 +4,18 @@ import axios from "axios";
 import { Lock, CheckCircle, AlertCircle } from "lucide-react";
 
 const ResetPassword = () => {
-  const { token } = useParams(); // Grab the token from the URL
+  const { token } = useParams();
   const navigate = useNavigate();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [status, setStatus] = useState({ type: "", message: "" }); // type: 'success' | 'error'
+  const [status, setStatus] = useState({ type: "", message: "" });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ type: "", message: "" });
 
-    // 1. Basic Validation
     if (password !== confirmPassword) {
         setStatus({ type: "error", message: "Passwords do not match." });
         return;
@@ -29,23 +28,18 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      // 2. Call Node.js Backend (Port 3000)
-      // Ensure this matches your Node server route
       await axios.post("http://localhost:3000/reset-password", {
         token: token,
         newPassword: password,
       });
 
-      // 3. Success Handling
       setStatus({ type: "success", message: "Password reset successfully! Redirecting..." });
-      
-      // Redirect to login after 2 seconds
+
       setTimeout(() => {
         navigate("/login");
       }, 3000);
 
     } catch (error) {
-      // 4. Error Handling
       const errorMsg = error.response?.data?.message || "Invalid or expired token.";
       setStatus({ type: "error", message: errorMsg });
     } finally {
@@ -70,7 +64,7 @@ const ResetPassword = () => {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             
-            {/* New Password */}
+            {}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-semibold">New Password</span>
@@ -85,7 +79,7 @@ const ResetPassword = () => {
               />
             </div>
 
-            {/* Confirm Password */}
+            {}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-semibold">Confirm Password</span>
@@ -100,7 +94,7 @@ const ResetPassword = () => {
               />
             </div>
 
-            {/* Status Messages */}
+            {}
             {status.message && (
                 <div className={`alert ${status.type === 'success' ? 'alert-success' : 'alert-error'} text-sm py-2 mt-2`}>
                     {status.type === 'success' ? <CheckCircle size={18}/> : <AlertCircle size={18}/>}
@@ -108,7 +102,7 @@ const ResetPassword = () => {
                 </div>
             )}
 
-            {/* Submit Button */}
+            {}
             <button 
                 className="btn btn-primary w-full mt-4" 
                 disabled={loading || status.type === 'success'}

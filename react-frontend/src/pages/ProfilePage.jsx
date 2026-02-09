@@ -9,26 +9,22 @@ const ProfilePage = () => {
   const { user, token } = useAuthStore();
   const navigate = useNavigate();
 
-  // Data States
-  const [activeTab, setActiveTab] = useState("myPosts"); 
+    const [activeTab, setActiveTab] = useState("myPosts");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-  // Profile Editing State
-  const [fullUserProfile, setFullUserProfile] = useState(null);
+
+    const [fullUserProfile, setFullUserProfile] = useState(null);
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [aboutText, setAboutText] = useState("");
 
-  // Confirmation Dialog State
-  const [confirmDialog, setConfirmDialog] = useState({
+    const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
-    type: "", // 'deletePost', 'deleteComment', 'deleteSaved', 'deleteLiked'
-    id: null,
+    type: "",
+        id: null,
     title: ""
   });
 
-  // 1. Fetch User Details
-  useEffect(() => {
+    useEffect(() => {
     if (!token || !user) {
       navigate("/login");
       return;
@@ -43,8 +39,7 @@ const ProfilePage = () => {
     fetchUserDetails();
   }, [user, token, navigate]);
 
-  // 2. Fetch Tab Content
-  useEffect(() => {
+    useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setData([]);
@@ -78,16 +73,14 @@ const ProfilePage = () => {
     } catch (err) { alert("Could not update profile."); }
   };
 
-  // --- DELETE HANDLERS ---
-
-  const requestDelete = (type, id) => {
+    const requestDelete = (type, id) => {
     let title = "Are you sure?";
     if (type === "deletePost") title = "Delete this post permanently?";
     if (type === "deleteComment") title = "Delete this comment?";
     if (type === "deleteSaved") title = "Remove from Saved Posts?";
-    if (type === "deleteLiked") title = "Remove from Liked Posts?"; // Added Title
-    
-    setConfirmDialog({ isOpen: true, type, id, title });
+    if (type === "deleteLiked") title = "Remove from Liked Posts?";
+
+        setConfirmDialog({ isOpen: true, type, id, title });
   };
 
   const confirmAction = async () => {
@@ -100,11 +93,9 @@ const ProfilePage = () => {
             await api.delete(`/comments/${id}`);
             setData(data.filter(item => item.id !== id));
         } else if (type === "deleteSaved") {
-            // Toggling save again removes it
-            await api.post(`/post/${id}/save`); 
+            await api.post(`/post/${id}/save`);
             setData(data.filter(item => item.postId !== id));
         } else if (type === "deleteLiked") {
-            // Toggling like again removes it (unlike)
             await api.post(`/post/${id}/like`);
             setData(data.filter(item => item.postId !== id));
         }
@@ -121,7 +112,7 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen pt-20 pb-10 px-4 max-w-6xl mx-auto relative">
       
-      {/* --- CUSTOM ALERT MODAL --- */}
+      {}
       {confirmDialog.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
             <div role="alert" className="alert shadow-2xl bg-base-100 max-w-md border border-base-300 transform scale-100">
@@ -148,7 +139,7 @@ const ProfilePage = () => {
         </div>
       )}
 
-      {/* --- Profile Header --- */}
+      {}
       <div className="bg-base-100 shadow-xl rounded-2xl p-8 mb-10 border border-base-200">
         <div className="flex flex-col md:flex-row gap-8 items-start">
           <div className="avatar placeholder">
@@ -191,7 +182,7 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* --- Tabs --- */}
+      {}
       <div className="tabs tabs-boxed bg-base-100 p-2 mb-8 shadow-sm justify-center md:justify-start gap-2">
         {['myPosts', 'saved', 'liked', 'comments'].map(tab => (
             <a key={tab} className={`tab tab-lg capitalize ${activeTab === tab ? 'tab-active' : ''}`} onClick={() => setActiveTab(tab)}>
@@ -204,7 +195,7 @@ const ProfilePage = () => {
         ))}
       </div>
 
-      {/* --- Content --- */}
+      {}
       {loading ? (
         <div className="flex justify-center py-20"><span className="loading loading-spinner loading-lg"></span></div>
       ) : (
@@ -216,7 +207,7 @@ const ProfilePage = () => {
                   <div key={post.postId} className="relative group h-full">
                     <PostCard post={post} />
                     
-                    {/* Controls for MY STORIES */}
+                    {}
                     {activeTab === 'myPosts' && (
                        <div className="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                           <Link to={`/edit/${post.postId}`} className="btn btn-sm btn-info text-white shadow-lg border-none"><Edit2 size={16}/></Link>
@@ -224,7 +215,7 @@ const ProfilePage = () => {
                        </div>
                     )}
 
-                    {/* Controls for SAVED POSTS */}
+                    {}
                     {activeTab === 'saved' && (
                        <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                           <button 
@@ -237,7 +228,7 @@ const ProfilePage = () => {
                        </div>
                     )}
 
-                    {/* Controls for LIKED POSTS (Added) */}
+                    {}
                     {activeTab === 'liked' && (
                        <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                           <button 
@@ -255,7 +246,7 @@ const ProfilePage = () => {
             </div>
           )}
 
-          {/* Comments List */}
+          {}
           {activeTab === 'comments' && (
             <div className="space-y-4 max-w-3xl mx-auto">
               {data.length > 0 ? (

@@ -27,37 +27,31 @@ const PostPage = () => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Interactive State
   const [commentText, setCommentText] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [isSaved, setIsSaved] = useState(false);
 
-  // --- MODAL STATES ---
-  // 1. Login Requirement
   const [showLoginAlert, setShowLoginAlert] = useState(false);
 
-  // 2. Report Modal (Reason Input)
   const [reportModal, setReportModal] = useState({
     isOpen: false,
-    type: "", // 'post' or 'comment'
+    type: "",
     id: null,
   });
   const [reportReason, setReportReason] = useState("");
 
-  // 3. Confirmation Dialog (Delete)
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
     title: "",
     message: "",
-    action: null, // Function to execute on confirm
+    action: null,
   });
 
-  // 4. Info/Success Alert (Replacing standard alert())
   const [infoAlert, setInfoAlert] = useState({
     isOpen: false,
-    type: "error", // 'error' or 'success'
+    type: "error",
     message: "",
   });
 
@@ -92,8 +86,6 @@ const PostPage = () => {
       console.error(err);
     }
   };
-
-  // --- HANDLERS ---
 
   const handleLike = async () => {
     if (!token) {
@@ -146,7 +138,6 @@ const PostPage = () => {
     }
   };
 
-  // --- REPORT LOGIC ---
   const initiateReport = (type, id) => {
     if (!token) {
       setShowLoginAlert(true);
@@ -161,7 +152,7 @@ const PostPage = () => {
 
     const payload = {
       reason: reportReason,
-      reporterName: user.name, // Optional, backend might extract from token
+      reporterName: user.name,
       postId: reportModal.type === "post" ? reportModal.id : null,
       commentId: reportModal.type === "comment" ? reportModal.id : null,
     };
@@ -184,7 +175,6 @@ const PostPage = () => {
     }
   };
 
-  // --- DELETE LOGIC (Custom Alert) ---
   const handleDeleteRequest = (commentId) => {
     setConfirmDialog({
       isOpen: true,
@@ -211,7 +201,6 @@ const PostPage = () => {
     }
   };
 
-  // --- RENDER ---
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -238,9 +227,9 @@ const PostPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100 pb-20 relative">
-      {/* ================= MODALS ================= */}
+      {}
 
-      {/* 1. Login Required Modal */}
+      {}
       {showLoginAlert && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div
@@ -269,7 +258,7 @@ const PostPage = () => {
         </div>
       )}
 
-      {/* 2. Custom Confirmation Modal (Delete) */}
+      {}
       {confirmDialog.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div
@@ -301,7 +290,7 @@ const PostPage = () => {
         </div>
       )}
 
-      {/* 3. Info/Success Modal */}
+      {}
       {infoAlert.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div
@@ -329,7 +318,7 @@ const PostPage = () => {
         </div>
       )}
 
-      {/* 4. Report Modal */}
+      {}
       {reportModal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-base-100 p-6 rounded-2xl shadow-2xl max-w-md w-full border border-base-300">
@@ -366,7 +355,7 @@ const PostPage = () => {
         </div>
       )}
 
-      {/* ================= HERO SECTION ================= */}
+      {}
       <div
         className="relative h-[50vh] w-full bg-cover bg-center"
         style={{
@@ -426,7 +415,7 @@ const PostPage = () => {
               </div>
 
               <div className="flex items-center gap-4">
-                {/* Report Post Button */}
+                {}
                 <button
                   onClick={() => initiateReport("post", post.postId)}
                   className={`btn btn-circle btn-lg border-none shadow-2xl backdrop-blur-md transition-all hover:scale-110
@@ -439,7 +428,7 @@ const PostPage = () => {
                 >
                   <Flag size={24} />
                 </button>
-                {/* Save Button */}
+                {}
                 <button
                   onClick={handleSave}
                   className={`btn btn-circle btn-lg border-none shadow-2xl backdrop-blur-md transition-all hover:scale-110
@@ -455,7 +444,7 @@ const PostPage = () => {
                     fill={isSaved ? "currentColor" : "none"}
                   />
                 </button>
-                {/* Like Button */}
+                {}
                 <button
                   onClick={handleLike}
                   className={`btn btn-circle btn-lg border-none shadow-2xl backdrop-blur-md transition-all hover:scale-110
@@ -474,7 +463,7 @@ const PostPage = () => {
         </div>
       </div>
 
-      {/* ================= CONTENT & COMMENTS ================= */}
+      {}
       <div className="max-w-3xl mx-auto px-6 mt-12">
         <div className="flex items-center gap-6 mb-8 text-base-content/60 border-b border-base-200 pb-4">
           <div className="flex items-center gap-2">
@@ -504,7 +493,7 @@ const PostPage = () => {
         <div className="space-y-8">
           <h3 className="text-2xl font-bold">Discussion</h3>
 
-          {/* Comment Form */}
+          {}
           {token ? (
             <form
               onSubmit={handleCommentSubmit}
@@ -561,7 +550,7 @@ const PostPage = () => {
             </div>
           )}
 
-          {/* Comment List */}
+          {}
           <div className="space-y-6">
             {post.comments && post.comments.length > 0 ? (
               [...post.comments].reverse().map((comment) => {
@@ -606,7 +595,7 @@ const PostPage = () => {
                           </Link>
 
                           <div className="flex gap-1">
-                            {/* Report Comment Button (Always visible on hover) */}
+                            {}
                             <button
                               onClick={() =>
                                 initiateReport("comment", comment.id)
@@ -617,7 +606,7 @@ const PostPage = () => {
                               <Flag size={14} className="text-warning" />
                             </button>
 
-                            {/* Delete Comment Button */}
+                            {}
                             {canDelete && (
                               <button
                                 onClick={() => handleDeleteRequest(comment.id)}

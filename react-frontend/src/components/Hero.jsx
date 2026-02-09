@@ -10,11 +10,9 @@ const Hero = () => {
 
   const handleGetStarted = () => {
     if (token) {
-      // If logged in, go to Write page
-      navigate("/write");
+        navigate("/write");
     } else {
-      // If not logged in, go to Login
-      navigate("/login");
+        navigate("/login");
     }
   };
 
@@ -26,12 +24,12 @@ const Hero = () => {
           "url(https://shoppaulzizkaphoto.com/cdn/shop/products/Desktop-1.jpg)",
       }}
     >
-      {/* Cinematic overlay */}
+      {}
       {theme === "night" && (
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/30 to-black/10"></div>
       )}
 
-      {/* Hero Content */}
+      {}
       <div className="relative z-10 flex items-center justify-center min-h-[70vh] text-center text-white">
         <div className="max-w-md px-4">
           <h1
@@ -59,7 +57,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Bottom Fade */}
+      {}
       <div
         className="absolute bottom-0 left-0 right-0 h-[25vh]
         bg-linear-to-b 

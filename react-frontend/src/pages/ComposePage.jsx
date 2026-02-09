@@ -8,34 +8,27 @@ const ComposePage = () => {
   const navigate = useNavigate();
   const { token } = useAuthStore();
 
-  // Image state
   const [imageName, setImageName] = useState("");
 
-  // Form State
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categories, setCategories] = useState([]);
 
-  // UI State
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // 1. Protect Route & Fetch Categories
   useEffect(() => {
     if (!token) {
       navigate("/login");
       return;
     }
 
-    // Fetch categories for the dropdown
     const fetchCategories = async () => {
       try {
-        // FIX: Changed endpoint to match your logs '/Category'
         const response = await api.get("/Category");
         setCategories(response.data);
 
-        // FIX: Use 'id' instead of 'categoryId' based on your DB columns
         if (response.data && response.data.length > 0) {
           setCategoryId(response.data[0].id);
         }
@@ -59,8 +52,6 @@ const ComposePage = () => {
     }
 
     try {
-      // Endpoint: POST /home/api/category/{categoryId}/POST
-      // This will now send /category/1/POST instead of /category/Tech/POST
       const response = await api.post(`/category/${categoryId}/POST`, {
         title,
         content,
@@ -79,7 +70,7 @@ const ComposePage = () => {
   return (
     <div className="min-h-screen pt-20 pb-10 px-4 max-w-4xl mx-auto">
       <div className="flex flex-col gap-6">
-        {/* Header */}
+        {}
         <div className="text-center md:text-left">
           <h1 className="text-4xl font-extrabold mb-2">Create a Story</h1>
           <p className="text-base-content/60">
@@ -87,7 +78,7 @@ const ComposePage = () => {
           </p>
         </div>
 
-        {/* Error Alert */}
+        {}
         {error && (
           <div role="alert" className="alert alert-error">
             <svg
@@ -108,7 +99,7 @@ const ComposePage = () => {
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-          {/* Title Input */}
+          {}
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-bold text-lg">Title</span>
@@ -123,7 +114,7 @@ const ComposePage = () => {
             />
           </div>
 
-          {/* Category Select */}
+          {}
           <div className="form-control w-full md:w-1/2">
             <label className="label">
               <span className="label-text font-bold">Category</span>
@@ -137,8 +128,7 @@ const ComposePage = () => {
                 Select a category
               </option>
               {categories.map((cat) => (
-                // FIX: Used 'cat.id' for key and value to resolve unique key error and 403
-                <option key={cat.id} value={cat.id}>
+                  <option key={cat.id} value={cat.id}>
                   {cat.categoryTitle}
                 </option>
               ))}
@@ -147,7 +137,7 @@ const ComposePage = () => {
 
           <ImageUpload onUploadSuccess={(url) => setImageName(url)} />
 
-          {/* Content Textarea */}
+          {}
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text font-bold text-lg">Content</span>
@@ -161,7 +151,7 @@ const ComposePage = () => {
             ></textarea>
           </div>
 
-          {/* Actions */}
+          {}
           <div className="flex justify-end items-center gap-4 mt-4">
             <button
               type="button"

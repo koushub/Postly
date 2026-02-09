@@ -21,7 +21,6 @@ exports.uploadImage = async (req, res) => {
         });
 
         blobStream.on('finish', async () => {
-            // Make public and get URL
             await blob.makePublic();
             const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
             res.status(200).json({ filePath: publicUrl });

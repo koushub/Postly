@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { uploadImage } from '../services/nodeService';
-import { Image as ImageIcon, Loader, X } from 'lucide-react'; // Assuming you have lucide-react, or use text
+import { Image as ImageIcon, Loader, X } from 'lucide-react';
 
 const ImageUpload = ({ onUploadSuccess, initialImage }) => {
   const [preview, setPreview] = useState(initialImage || null);
@@ -10,17 +10,14 @@ const ImageUpload = ({ onUploadSuccess, initialImage }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // 1. Show local preview immediately (optional, for better UX)
     const localUrl = URL.createObjectURL(file);
     setPreview(localUrl);
     setLoading(true);
 
     try {
-      // 2. Upload to Node.js -> Firebase
       const firebaseUrl = await uploadImage(file);
-      
-      // 3. Pass the final real URL back to the parent form
-      onUploadSuccess(firebaseUrl); 
+
+      onUploadSuccess(firebaseUrl);
     } catch (error) {
       alert("Failed to upload image");
       setPreview(null);
@@ -31,7 +28,7 @@ const ImageUpload = ({ onUploadSuccess, initialImage }) => {
 
   const handleRemove = () => {
     setPreview(null);
-    onUploadSuccess(""); // Clear the URL in the parent
+    onUploadSuccess("");
   };
 
   return (

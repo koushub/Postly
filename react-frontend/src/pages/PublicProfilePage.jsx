@@ -15,17 +15,12 @@ const PublicProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. Fetch Public User Details
-        // Endpoint: GET /home/api/public/users/{userId}
-        const userRes = await api.get(`/public/users/${userId}`);
+          const userRes = await api.get(`/public/users/${userId}`);
         setProfile(userRes.data);
 
-        // 2. Fetch User's Posts (Reuse existing endpoint)
-        // Endpoint: GET /home/api/user/{userId}/POST
-        const postsRes = await api.get(`/user/${userId}/POST`);
-        
-        // Handle Pagination vs Array structure
-        if (postsRes.data && postsRes.data.content && Array.isArray(postsRes.data.content)) {
+          const postsRes = await api.get(`/user/${userId}/POST`);
+
+          if (postsRes.data && postsRes.data.content && Array.isArray(postsRes.data.content)) {
             setPosts(postsRes.data.content);
         } else if (Array.isArray(postsRes.data)) {
             setPosts(postsRes.data);
@@ -64,10 +59,10 @@ const PublicProfilePage = () => {
   return (
     <div className="min-h-screen pt-20 pb-10 px-4 max-w-6xl mx-auto">
       
-      {/* --- Profile Header --- */}
+      {}
       <div className="bg-base-100 shadow-xl rounded-2xl p-8 mb-10 border border-base-200">
         <div className="flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left">
-          {/* Avatar */}
+          {}
           <div className="avatar placeholder">
             <div className="bg-primary text-primary-content 
     rounded-full 
@@ -80,7 +75,7 @@ const PublicProfilePage = () => {
             </div>
           </div>
 
-          {/* Info */}
+          {}
           <div className="flex-1">
             <h1 className="text-4xl font-extrabold mb-2">{profile.name}</h1>
             <div className="badge badge-secondary badge-outline mb-4">Author</div>
@@ -97,7 +92,7 @@ const PublicProfilePage = () => {
         </div>
       </div>
 
-      {/* --- Stories Section --- */}
+      {}
       <div className="mb-6 flex items-center gap-2">
          <FileText className="text-primary" />
          <h2 className="text-2xl font-bold">Stories by {profile.name}</h2>
